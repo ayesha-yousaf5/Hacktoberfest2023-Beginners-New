@@ -1,0 +1,64 @@
+// Game variables
+let gameStarted = false;
+let playerCar = { x: 100, y: 300, speed: 0 };
+let enemyCar = { x: 500, y: 300, speed: 0 };
+let playerScore = 0;
+let enemyScore = 0;
+
+// Game functions
+function startGame() {
+ gameStarted = true;
+ playerCar.speed = 5;
+ enemyCar.speed = 5;
+}
+
+function movePlayerCar(direction) {
+ if (direction === 'left' && playerCar.x > 0) {
+    playerCar.x -= 10;
+ } else if (direction === 'right' && playerCar.x < 400) {
+    playerCar.x += 10;
+ }
+}
+
+function moveEnemyCar() {
+ if (Math.random() > 0.9) {
+    if (enemyCar.x > 0) {
+      enemyCar.x -= 10;
+    } else {
+      enemyCar.x += 10;
+    }
+ }
+}
+
+function checkCollision() {
+ const distance = Math.sqrt(Math.pow(playerCar.x - enemyCar.x, 2) + Math.pow(playerCar.y - enemyCar.y, 2));
+ if (distance < 50) {
+    return true;
+ }
+ return false;
+}
+
+function updateScore() {
+ if (playerCar.x > enemyCar.x) {
+    playerScore++;
+ } else if (playerCar.x < enemyCar.x) {
+    enemyScore++;
+ }
+}
+
+// Game loop
+function gameLoop() {
+ if (gameStarted) {
+    movePlayerCar('left');
+    moveEnemyCar();
+    if (checkCollision()) {
+      alert('Game Over');
+      gameStarted = false;
+    } else {
+      updateScore();
+    }
+ }
+ requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
